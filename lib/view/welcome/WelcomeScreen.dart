@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assignment/model/flowers.dart';
-import 'package:flutter_assignment/screens/login_screen.dart';
+import 'package:flutter_assignment/models/flowers.dart';
+import 'package:flutter_assignment/view/login/LoginScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../const/colors.dart';
+import '../../res/colors/colors.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  static const String id = "welcome_screen";
+
   const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -96,12 +98,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: CachedNetworkImage(
-                          imageUrl: "https://www.linkpicture.com/q/care_1.png",
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                        child: IgnorePointer(
+                          child: CachedNetworkImage(
+                            imageUrl: "https://www.linkpicture.com/q/care_1.png",
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
                         ),
                       ),
                     ],
