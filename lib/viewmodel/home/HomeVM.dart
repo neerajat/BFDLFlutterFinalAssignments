@@ -78,7 +78,7 @@ List<WidgetComponentDetails>? _tabList;
     _personalizationSequence=<PersonalizationSequence>[];
     try{
       dynamic response= await _homeRepo.loadSliverBodyContent();
-      _personalizationSequence=response.personalizationSequence;
+      _personalizationSequence=response.payload.personalizationSequence ;
       print(_personalizationSequence);
     }catch(e){
       print(e);

@@ -1,11 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/res/colors/Colors.dart';
-import 'package:flutter_assignment/view/widgets/SliverHorizontalList.dart';
 import 'package:flutter_assignment/viewmodel/home/HomeVM.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/home/Ecart.dart';
+import '../../models/home/HomePage.dart';
+import '../../utils/const/Constant.dart';
 import '../widgets/CustomAppBar.dart';
+import '../widgets/SliverHorizontalListWidgetOne.dart';
+import '../widgets/SliverHorizontalListWidgetTwo.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = "home_screen";
@@ -25,11 +29,13 @@ class _HomeScreenState extends State<HomeScreen> {
     provider.loadHomeCarousalContent();
     provider.loadDockList();
     provider.loadSliverContent();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     final vm = Provider.of<HomeVM>(context);
 
     return Scaffold(
@@ -44,42 +50,63 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ];
           },
-          body: Column(
-            children: [
-
-              SizedBox(height: 80, child: SliverHorizontalList()),
-              SizedBox(height: 80, child: SliverHorizontalList()),
-              SizedBox(height: 80, child: SliverHorizontalList()),
-            ],
+          body: ListView(
+            children: customSliverListBody(vm.personalizationSequence),
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: colorBlack60,
-        fixedColor: colorGreen,
-        unselectedItemColor: Colors.black,
-        onTap: onItemTapped,
-        currentIndex: selectedIndex,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
+      bottomNavigationBar: customBottomNavigationBar(vm.dockList),
+    );
+  }
+
+  Widget customBottomNavigationBar(List<WidgetComponentDetails> dockList) {
+    List<BottomNavigationBarItem> bottomNavItem = <BottomNavigationBarItem>[];
+    for (var element in dockList) {
+      bottomNavItem.add(BottomNavigationBarItem(
+          icon: SizedBox(
+            height: 28,
+            child: CachedNetworkImage(
+              imageUrl: "$imageBaseUrl" + element.imageIcon.toString(),
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'For You',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_box),
-            label: 'Rewards',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_box),
-            label: 'Rewards',
-          ),
-        ],
+          label: element.name));
+    }
+    return bottomNavItem.isNotEmpty?BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: colorBlack60,
+      fixedColor: colorGreen,
+      unselectedItemColor: Colors.black,
+      onTap: onItemTapped,
+      currentIndex: selectedIndex,
+      items: bottomNavItem,
+    ):Center(
+      child: Container(
+        width: 50,
+        height: 50,
+        child: CircularProgressIndicator(),
       ),
     );
+  }
+
+  List<Widget> customSliverListBody(List<PersonalizationSequence> list){
+    List<Widget> dynamicWidget=<Widget>[];
+    List<PersonalizationSequence> personalizationSequence=<PersonalizationSequence>[];
+    personalizationSequence=list;
+    for (var element in personalizationSequence) {
+      if(dynamicWidget.length%2==0){
+        dynamicWidget.add(
+            SizedBox(height: 100, child: SliverHorizontalListWidgetOne(widgetTabList: element.widgetComponentDetails!,)
+            ));
+      }
+      else{
+        dynamicWidget.add(
+            SizedBox(height: 100, child: SliverHorizontalListWidgetTwo(widgetTabList: element.widgetComponentDetails!,)
+            ));
+      }
+    }
+    print(dynamicWidget.length);
+
+    return dynamicWidget.isNotEmpty?dynamicWidget:[Container()];
   }
 
   void onItemTapped(int index) {

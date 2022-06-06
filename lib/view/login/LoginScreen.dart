@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_assignment/res/colors/colors.dart';
 import 'package:flutter_assignment/view/signup/SignUpScreen.dart';
 import 'package:flutter_assignment/viewmodel/login/LoginVM.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +11,7 @@ import '../../res/strings/strings.dart';
 import '../../utils/SharedPreferencesConst.dart';
 import '../../utils/mixin/InputValidationMixin.dart';
 import '../home/HomeScreen.dart';
+import '../widgets/SocialLoginWidget.dart';
 
 class LoginScreen extends StatefulWidget with InputValidationMixin {
   static const String id = "login_screen";
@@ -234,41 +234,7 @@ class _LoginScreenState extends State<LoginScreen>{
                       const SizedBox(
                         height: 50,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, HomeScreen.id);
-                            },
-                            color: Colors.blue,
-                            textColor: Colors.white,
-                            child: Icon(FontAwesomeIcons.facebookF,
-                                color: Colors.white, size: 18.0),
-                            shape: CircleBorder(),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, HomeScreen.id);
-                            },
-                            color: Colors.deepOrange,
-                            textColor: Colors.white,
-                            child: Icon(FontAwesomeIcons.googlePlusG,
-                                color: Colors.white, size: 18.0),
-                            shape: CircleBorder(),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, HomeScreen.id);
-                            },
-                            color: Colors.blue,
-                            textColor: Colors.white,
-                            child: Icon(FontAwesomeIcons.twitter,
-                                color: Colors.white, size: 18.0),
-                            shape: CircleBorder(),
-                          ),
-                        ],
-                      ),
+                      const SocialLoginWidget(),
                       const SizedBox(
                         height: 100,
                       ),
@@ -301,3 +267,4 @@ class _LoginScreenState extends State<LoginScreen>{
         ));
   }
 }
+

@@ -1,5 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_assignment/res/colors/Colors.dart';
 import 'package:flutter_assignment/utils/SharedPreferencesConst.dart';
 import 'package:flutter_assignment/view/home/HomeScreen.dart';
 import 'package:flutter_assignment/view/login/LoginScreen.dart';
@@ -11,7 +11,7 @@ import 'package:flutter_assignment/viewmodel/signup/SignUpVM.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main()  {
   runApp(const FlutterAssignment());
 }
 
@@ -23,6 +23,7 @@ class FlutterAssignment extends StatefulWidget {
 }
 
 class _FlutterAssignmentState extends State<FlutterAssignment> {
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
