@@ -95,12 +95,16 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var element in personalizationSequence) {
       if(dynamicWidget.length%2==0){
         dynamicWidget.add(
-            SizedBox(height: 100, child: SliverHorizontalListWidgetOne(widgetTabList: element.widgetComponentDetails!,)
+            SizedBox(
+                width: 150,
+                height: 100, child: SliverHorizontalListWidgetOne(widgetTabList: element.widgetComponentDetails!,)
             ));
       }
       else{
         dynamicWidget.add(
-            SizedBox(height: 100, child: SliverHorizontalListWidgetTwo(widgetTabList: element.widgetComponentDetails!,)
+            SizedBox(
+                width: 150,
+                height: 100, child: SliverHorizontalListWidgetTwo(widgetTabList: element.widgetComponentDetails!,)
             ));
       }
     }

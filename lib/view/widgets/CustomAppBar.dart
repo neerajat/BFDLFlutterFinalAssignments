@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,11 +8,13 @@ import 'package:flutter_assignment/models/home/Carousal.dart';
 import 'package:flutter_assignment/res/colors/Colors.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/home/HomePage.dart';
+import '../../utils/utility.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
 
    CustomAppBar({
     Key? key,required this.imageList,required this.widgetTabList
@@ -18,12 +23,27 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
    final List<ImageList> imageList;
    final List<WidgetComponentDetails> widgetTabList;
 
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => throw UnimplementedError();
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
+   BottomDrawerController bottomDrawerController = BottomDrawerController();
+
    @override
   Widget build(BuildContext context) {
     final controller = PageController(viewportFraction: 0.8, keepPage: true);
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    var imagePicker;
+    var _image;
+
+
 
     return SliverAppBar(
       backgroundColor: colorGreen,
@@ -37,10 +57,17 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           MaterialButton(
-            onPressed: () {},
+            onPressed: () async {
+              XFile image = await imagePicker.pickImage(
+                  source: ImageSource.gallery, imageQuality: 50, preferredCameraDevice: CameraDevice.front);
+              setState(() {
+                _image = File(image.path);
+              });
+            },
             color: colorWhite,
             textColor: Colors.white,
-            child: Icon(FontAwesomeIcons.user, color: colorGreen, size: 18.0),
+            child: _image!=null?
+                : Icon(FontAwesomeIcons.user, color: colorGreen, size: 18.0),
             shape: CircleBorder(),
           ),
           SizedBox(
@@ -119,7 +146,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                               height: double.maxFinite, //// USE THIS FOR THE MATCH WIDTH AND HEIGHT
                               width: double.maxFinite,
                               fit: BoxFit.fill,
-                              imageUrl: (imageList[position].image)!,
+                              imageUrl: (widget.imageList[position].image)!,
                             ),
                             Align(
                               child: Card(
@@ -134,11 +161,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                                     height: 50,
                                     child:Column(
                                       children: [
-                                        Text(imageList[position].smallText1!,style: GoogleFonts.lato(
+                                        Text(widget.imageList[position].smallText1!,style: GoogleFonts.lato(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold
                                         ),),
-                                        Text(imageList[position].smallText2!,style: GoogleFonts.lato(
+                                        Text(widget.imageList[position].smallText2!,style: GoogleFonts.lato(
                                             fontSize: 8,
                                             fontWeight: FontWeight.normal
                                         ),),
@@ -153,7 +180,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                         );
                     },
                     controller: controller,
-                    itemCount:imageList.length,
+                    itemCount:widget.imageList.length,
                     ),
                 ),
               ),
@@ -167,7 +194,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   margin: EdgeInsets.only(bottom: 50),
                   child: Center(
                     child: SmoothPageIndicator(
-                      count: imageList.length,
+                      count: widget.imageList.length,
                       axisDirection: Axis.horizontal,
                       effect: const ExpandingDotsEffect(
                           spacing: 4.0,
@@ -197,12 +224,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   List<Tab> getTabs(List<WidgetComponentDetails> widgetTabList){
      var tabList=<Tab>[];
-      widgetTabList.forEach((element) { 
+      widgetTabList.forEach((element) {
        tabList.add(Tab(text: element.name,));
      });
       return tabList;
   }
-  
+
   @override
   Size get preferredSize => const Size.fromHeight(300);
 }
