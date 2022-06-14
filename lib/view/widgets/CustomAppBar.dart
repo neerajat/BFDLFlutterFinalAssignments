@@ -6,13 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_assignment/models/home/Carousal.dart';
 import 'package:flutter_assignment/res/colors/Colors.dart';
+import 'package:flutter_assignment/utils/utility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../models/home/HomePage.dart';
-import '../../utils/utility.dart';
+import '../../utils/SharedPreferencesConst.dart';
+import '../welcome/WelcomeScreen.dart';
 
 class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
 
@@ -34,17 +36,23 @@ class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
    BottomDrawerController bottomDrawerController = BottomDrawerController();
 
+   var imagePicker;
+   var _image;
+
+   @override
+  void initState() {
+
+     imagePicker = ImagePicker();
+
+     super.initState();
+  }
+
    @override
   Widget build(BuildContext context) {
     final controller = PageController(viewportFraction: 0.8, keepPage: true);
     final double statusBarHeight = MediaQuery.of(context).padding.top;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    var imagePicker;
-    var _image;
-
-
-
     return SliverAppBar(
       backgroundColor: colorGreen,
       automaticallyImplyLeading: false,
@@ -66,7 +74,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
             },
             color: colorWhite,
             textColor: Colors.white,
-            child: _image!=null?
+            child: _image!=null?Image.file(
+              _image,
+              width: 18,
+              height: 18,
+              fit: BoxFit.fitHeight,
+            )
                 : Icon(FontAwesomeIcons.user, color: colorGreen, size: 18.0),
             shape: CircleBorder(),
           ),
@@ -102,10 +115,17 @@ class _CustomAppBarState extends State<CustomAppBar> {
             width: 20,
           ),
           MaterialButton(
-            onPressed: () {},
+            onPressed: () {
+              saveBool(loggedInKey,false).then((value) => {
+
+                Navigator.popAndPushNamed(context, WelcomeScreen.id)
+
+              });
+
+            },
             color: colorWhite,
             textColor: Colors.white,
-            child: Icon(Icons.search, color: colorGreen, size: 18.0),
+            child: Icon(Icons.logout, color: colorGreen, size: 18.0),
             shape: CircleBorder(),
           ),
         ],

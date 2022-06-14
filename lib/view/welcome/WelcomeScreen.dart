@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment/models/flowers.dart';
+import 'package:flutter_assignment/utils/SharedPreferencesConst.dart';
+import 'package:flutter_assignment/utils/utility.dart';
 import 'package:flutter_assignment/view/login/LoginScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../res/colors/colors.dart';
+import '../home/HomeScreen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = "welcome_screen";
@@ -30,6 +33,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         flower_link: "https://www.linkpicture.com/q/helianthas.png"),
   ];
   int _position = 0;
+
+  @override
+  void initState() {
+
+    getBool(loggedInKey).then((value) => {
+      if(value==true){
+        Navigator.popAndPushNamed(context, HomeScreen.id)
+      }
+    }
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

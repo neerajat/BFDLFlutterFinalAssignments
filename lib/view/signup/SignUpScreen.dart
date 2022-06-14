@@ -11,6 +11,7 @@ import '../../res/strings/strings.dart';
 import '../../utils/SharedPreferencesConst.dart';
 import '../../utils/mixin/InputValidationMixin.dart';
 import '../home/HomeScreen.dart';
+import '../widgets/SocialLoginWidget.dart';
 
 class SignUpScreen extends StatefulWidget with InputValidationMixin{
   static const String id = "signup_screen";
@@ -24,6 +25,7 @@ class SignUpScreen extends StatefulWidget with InputValidationMixin{
 class _SignUpScreenState extends State<SignUpScreen>  {
   bool _isHidden = true;
   final formGlobalKey = GlobalKey < FormState > ();
+  var isLoading=false;
 
   @override
   void initState() {
@@ -227,6 +229,9 @@ class _SignUpScreenState extends State<SignUpScreen>  {
                               formGlobalKey.currentState!.save();
                               // use the email provided here
 
+                              setState(() {
+                                isLoading=true;
+                              });
                              await signUpVM.registerUser(
                                   emailTextEditingController.text
                                       .toString(),
@@ -236,7 +241,10 @@ class _SignUpScreenState extends State<SignUpScreen>  {
                               if(signUpVM.token!=null && signUpVM.token.isNotEmpty){
                                 print("token => ${signUpVM.token}");
                                 signUpVM.saveBool(loggedInKey, true);
-                                Navigator.pushNamed(context, HomeScreen.id);
+                                setState(() {
+                                  isLoading=false;
+                                });
+                                Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
                               }
                             }
                           },
@@ -275,43 +283,7 @@ class _SignUpScreenState extends State<SignUpScreen>  {
                       const SizedBox(
                         height: 50,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, HomeScreen.id);
-
-                            },
-                            color: Colors.blue,
-                            textColor: Colors.white,
-                            child: Icon(FontAwesomeIcons.facebookF,
-                                color: Colors.white, size: 18.0),
-                            shape: CircleBorder(),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, HomeScreen.id);
-
-                            },
-                            color: Colors.deepOrange,
-                            textColor: Colors.white,
-                            child: Icon(FontAwesomeIcons.googlePlusG,
-                                color: Colors.white, size: 18.0),
-                            shape: CircleBorder(),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, HomeScreen.id);
-                            },
-                            color: Colors.blue,
-                            textColor: Colors.white,
-                            child: Icon(FontAwesomeIcons.twitter,
-                                color: Colors.white, size: 18.0),
-                            shape: CircleBorder(),
-                          ),
-                        ],
-                      ),
+                      const SocialLoginWidget(),
                       const SizedBox(
                         height: 100,
                       ),
@@ -339,7 +311,11 @@ class _SignUpScreenState extends State<SignUpScreen>  {
                   ),
                 ),
               ),
-            )
+            ),
+            if(isLoading)
+            Container(
+                constraints: const BoxConstraints.expand(),
+                child: Center(child: CircularProgressIndicator())),
           ],
         ));
   }

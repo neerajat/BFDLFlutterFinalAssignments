@@ -35,7 +35,7 @@ class _SocialLoginWidgetState extends State<SocialLoginWidget> {
       children: [
         MaterialButton(
           onPressed: () {
-            
+            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
           },
           color: Colors.blue,
           textColor: Colors.white,
@@ -45,7 +45,8 @@ class _SocialLoginWidgetState extends State<SocialLoginWidget> {
         ),
         MaterialButton(
           onPressed: () {
-            Navigator.pushNamed(context, HomeScreen.id);
+            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
+
           },
           color: Colors.deepOrange,
           textColor: Colors.white,
@@ -55,7 +56,8 @@ class _SocialLoginWidgetState extends State<SocialLoginWidget> {
         ),
         MaterialButton(
           onPressed: () {
-            Navigator.pushNamed(context, HomeScreen.id);
+            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
+
           },
           color: Colors.blue,
           textColor: Colors.white,

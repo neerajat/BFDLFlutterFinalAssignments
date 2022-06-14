@@ -28,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen>{
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
   final prefs = SharedPreferences.getInstance();
+  var isLoading=false;
+
   @override
   void initState() {
   }
@@ -183,7 +185,9 @@ class _LoginScreenState extends State<LoginScreen>{
                           onPressed: () async {
                             if (formGlobalKey.currentState!.validate()) {
                               formGlobalKey.currentState!.save();
-
+                              setState(() {
+                                isLoading=true;
+                              });
                              await loginVM.loginUser(emailTextEditingController.text
                                   .toString(),
                                   passwordTextEditingController.text
@@ -191,8 +195,12 @@ class _LoginScreenState extends State<LoginScreen>{
 
                               if(loginVM.token.isNotEmpty){
                                 print("token => ${loginVM.token}");
-                                loginVM.saveBool(loggedInKey, true);
-                                Navigator.popAndPushNamed(context, HomeScreen.id);
+                                await  loginVM.saveBool(loggedInKey, true);
+                                setState(() {
+                                  isLoading=false;
+                                });
+                                Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
+
                               }
                             }
                           },
@@ -262,7 +270,11 @@ class _LoginScreenState extends State<LoginScreen>{
                   ),
                 ),
               ),
-            )
+            ),
+            if(isLoading)
+              Container(
+                  constraints: const BoxConstraints.expand(),
+                  child: Center(child: CircularProgressIndicator())),
           ],
         ));
   }
