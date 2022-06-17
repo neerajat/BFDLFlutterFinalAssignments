@@ -116,6 +116,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ),
           MaterialButton(
             onPressed: () {
+              googleSignOut();
+              facebookSignOut();
               saveBool(loggedInKey,false).then((value) => {
 
                 Navigator.popAndPushNamed(context, WelcomeScreen.id)

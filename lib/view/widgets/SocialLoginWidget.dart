@@ -1,11 +1,9 @@
 
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../utils/utility.dart';
 import '../home/HomeScreen.dart';
 
 class SocialLoginWidget extends StatefulWidget {
@@ -35,7 +33,8 @@ class _SocialLoginWidgetState extends State<SocialLoginWidget> {
       children: [
         MaterialButton(
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
+          //  Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
+           facebookSignInProcess(context);
           },
           color: Colors.blue,
           textColor: Colors.white,
@@ -45,8 +44,8 @@ class _SocialLoginWidgetState extends State<SocialLoginWidget> {
         ),
         MaterialButton(
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
-
+            //Navigator.pushNamedAndRemoveUntil(context, HomeScreen.id,(Route<dynamic> route) => false);
+            googleSignInProcess(context);
           },
           color: Colors.deepOrange,
           textColor: Colors.white,

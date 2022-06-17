@@ -47,6 +47,9 @@ dependencies:
   firebase_core: ^1.17.1
   image_picker: ^0.8.2
   bottom_drawer: ^0.0.5
+  flutter_facebook_auth: ^4.3.4
+
+
 
 
 dev_dependencies:
